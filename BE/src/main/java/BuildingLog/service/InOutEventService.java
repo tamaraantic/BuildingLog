@@ -4,6 +4,9 @@ import BuildingLog.model.InOutEvent;
 import BuildingLog.repository.InOutEventRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class InOutEventService {
@@ -17,6 +20,10 @@ public class InOutEventService {
             System.out.println("Error while saving Building object: " + e.getMessage());
             return false;
         }
+    }
+
+    public List<InOutEvent> getAllEmployeesInside(){
+        return inOutEventRepository.getAllEmployeesInside();
     }
 }
 
