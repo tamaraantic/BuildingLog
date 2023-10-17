@@ -14,9 +14,9 @@ public class InOutEvent {
     @Column(timestamp = true)
     Instant lastInspected;
 
-    @Column
+    @Column(tag = true)
     Long employeeId;
 
-    @Column(tag = true)
+    @Column
     String direction;
 }

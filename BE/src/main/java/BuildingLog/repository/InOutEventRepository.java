@@ -42,9 +42,10 @@ public class InOutEventRepository {
 
         String query = "from(bucket: \"" + influxDBConnection.getBucket() + "\") " +
                 "|> range(start: -24h) " +
-                "|> group(columns: [\"employeeId\"]) " +
-                "|> map(fn: (r) => ({employeeId: r.employeeId, lastEvent: last(r: r)}))";
-
+                "|> sort(columns: [\"_time\"], desc: false) " +
+                "|> group(columns: [\"employeeId\"]) "+
+                "|> last() "+
+                "|> filter(fn: (r) => r._value == \"in\")";
 
         //List<InOutEvent> result = queryApi.query(query, InOutEvent.class);
 
@@ -56,12 +57,12 @@ public class InOutEventRepository {
             for (FluxRecord fluxRecord : fluxTable.getRecords()) {
                 InOutEvent inOutEvent = new InOutEvent();
                 inOutEvent.setLastInspected(fluxRecord.getTime());
-                Object employeeIdObject = fluxRecord.getValue();
+                Object employeeIdObject = fluxRecord.getValueByKey("employeeId");
                 if (employeeIdObject != null) {
-                    Long employeeId = ((Number) employeeIdObject).longValue();
+                    Long employeeId = (Long.valueOf(employeeIdObject.toString()));
                     inOutEvent.setEmployeeId(employeeId);
                 }
-                inOutEvent.setDirection((String) fluxRecord.getValueByKey("direction"));
+                inOutEvent.setDirection((String) fluxRecord.getValue());
                 inOutEvents.add(inOutEvent);
             }
         }
