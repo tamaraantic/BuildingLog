@@ -33,10 +33,8 @@ function App() {
         fetchEmployees().then((data)=>{data2=data})
         .then(() => fetchEmployeesIn())
           .then((data) => {
-            // Nakon postavljanja inOutEvents, koristimo ih unutar ovog then bloka
             setInOutEvents(data);
             
-            // Sada možete stvoriti inOutEventEmployeeMap s najnovijim podacima
             const inOutEventEmployeeMap = {};
             for (const event of data) {
               inOutEventEmployeeMap[event.employeeId] = event;
@@ -45,7 +43,6 @@ function App() {
             const newEmployeeOptionsIn = data2.filter(emp => !inOutEventEmployeeMap[emp.id]);
             const newEmployeeOptionsOut = data2.filter(emp => inOutEventEmployeeMap[emp.id]);
   
-            // Postavljamo nove opcije nakon što su podaci ažurirani
             setEmployeeOptionsIn(newEmployeeOptionsIn);
             setEmployeeOptionsOut(newEmployeeOptionsOut);
           });
@@ -181,7 +178,7 @@ function App() {
           <option value="">Select Employee</option>
           {employeeOptionsIn.map((employee) => (
             <option key={employee.id} value={employee.id}>
-              {employee.name}
+              {employee.name} {employee.surname}
             </option>
             ))}
           </Form.Select>
@@ -203,7 +200,7 @@ function App() {
           <option value="">Select Employee</option>
           {employeeOptionsOut.map((employee) => (
             <option key={employee.id} value={employee.id}>
-              {employee.name}
+              {employee.name} {employee.surname}
             </option>
             ))}
           </Form.Select>
